@@ -91,3 +91,5 @@ d. aac
 a. (𝜆𝑥.𝑧)𝑧((𝜆𝑥.𝑎)𝑧)
 b. 𝑧((𝜆𝑥.𝑎)𝑧)
 c. 𝑧𝑎
+^Not quite right. Distinguish between the two z's 
+with alpha equivalence
