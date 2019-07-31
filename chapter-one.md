@@ -93,3 +93,18 @@ b. 𝑧((𝜆𝑥.𝑎)𝑧)
 c. 𝑧𝑎
 ^Not quite right. Distinguish between the two z's 
 with alpha equivalence
+
+## Definitions
+
+1. The lambda in lambda calculus is the greek letter 𝜆 used to introduce, or abstract, arguments for binding in an expression.
+2. A lambda abstraction is an anonymous function or lambda term.
+(𝜆𝑥.𝑥 + 1)
+The head of the expression, 𝜆𝑥., abstracts out the term 𝑥 + 1. We can apply it to any 𝑥 and recompute different results for each 𝑥 we applied the lambda to.
+3. Application is how one evaluates or reduces lambdas, this binds the argument to whatever the lambda was applied to. Computations are performed in lambda calculus by applying lambdas to arguments until you run out of arguments to apply lambdas
+to.
+(𝜆𝑥.𝑥)1
+This example reduces to 1, the identity 𝜆𝑥.𝑥 was applied to the value 1, 𝑥 was bound to 1, and the lambda’s body is 𝑥, so it just kicks the 1 out. In a sense, applying the 𝜆𝑥.𝑥 consumed it. We reduced the amount of structure we had.
+4. Lambda calculus is a formal system for expressing programs in terms of abstraction and application.
+5. Normal order is a common evaluation strategy in lambda calculi. Normal order means evaluating (ie, applying or beta reducing) the leftmost outermost lambdas first, evaluating terms nested
+within after you’ve run out of arguments to apply. Normal order isn’t how Haskell code is evaluated - it’s call-by-need instead.
+We’ll explain this more later. Answers to the evaluation exercises were written in normal order.
