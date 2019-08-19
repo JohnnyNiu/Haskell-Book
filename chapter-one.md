@@ -105,6 +105,5 @@ to.
 (𝜆𝑥.𝑥)1
 This example reduces to 1, the identity 𝜆𝑥.𝑥 was applied to the value 1, 𝑥 was bound to 1, and the lambda’s body is 𝑥, so it just kicks the 1 out. In a sense, applying the 𝜆𝑥.𝑥 consumed it. We reduced the amount of structure we had.
 4. Lambda calculus is a formal system for expressing programs in terms of abstraction and application.
-5. Normal order is a common evaluation strategy in lambda calculi. Normal order means evaluating (ie, applying or beta reducing) the leftmost outermost lambdas first, evaluating terms nested
-within after you’ve run out of arguments to apply. Normal order isn’t how Haskell code is evaluated - it’s call-by-need instead.
+5. Normal order is a common evaluation strategy in lambda calculi. Normal order means evaluating (ie, applying or beta reducing) the leftmost outermost lambdas first, evaluating terms nested within after you’ve run out of arguments to apply. Normal order isn’t how Haskell code is evaluated - it’s call-by-need instead.
 We’ll explain this more later. Answers to the evaluation exercises were written in normal order.
