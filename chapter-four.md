@@ -1,28 +1,35 @@
 # Basic Datatypes
 
 ## Types
+
 * Like sets in maths
 * Every value has some type
 * Groups of values with commonalities share types
 
 ## Data declaration
+
 * e.g. `data Bool = False | True`
 * keyword data, capitalize name of type, logical disjunction for definition
 
 ### Exercises: Mood Swing
+
 1. Mood
 2. Blah, Woot
 3. should be `changeMood :: Mood -> Mood`, Woot is not the type, Mood is
 4. See file
 
 ## Numeric Types
+
 * All numeric types have instances Num typeclass which gives operators like (+), (-) etc
+  
 ### Integral
+
 1. `Int`: fixed-precision integer like in other language
 2. `Integer`: arbitrary size integer like in maths
 3. Use Integer unless there is a hardware reason to use Int to avoid out of range errors
 
 ### Fractional
+
 1. `Float`: single-precision floating point like in other languages
 2. `Double`: same as above but double-precision
 3. `Rational`: represented as a ratio of two integers
@@ -32,6 +39,7 @@
 7. Fractional is typeclass that always required Num typeclass. Num is superclass of Fractional
 
 ### Comparing Values
+
 * `(==) :: Eq a => a -> a -> Bool` equality operator using Eq typeclass for comparing if things are equal
 * `(<) :: Ord a => a -> a -> Bool` comparison operator using Ord typeclass for all things that can be ordered
 * Can use for letters and strings as well 
@@ -41,25 +49,29 @@
 * Can be used for lists where items use Ord
   
 ## Bool
+
 * have `not`, `&&` and `||` for logical operators
   
 ### Exercises: Find the Mistakes
+
 1. `not True && True` returns False
 2. `not (x == 6)`
 3. `(1 * 2) > 5` returns False
 4. `"Merry" > "Happy"` returns True
 
 ### Conditionals
+
 * no if statements, instead if expressions
 * `if True then t else f`
 
- ```
+```
  if CONDITION
 then EXPRESSION_A
 else EXPRESSION_B
- ```
+```
 
 ## Tuples
+
 * Let you store and pass around multiples values within a single value
 * two-tuple or pair = (x, y)
 * three-tuple = (x, y, z)
@@ -69,16 +81,18 @@ else EXPRESSION_B
 * `swap` reverses order of two-tuples
 
 ## Lists
+
 * Elements must be of same type
 * uses [ ] syntax
 * number of values isn't static
 
 ## Chapter Exercises
+
 1. `length :: [a] -> Integer` uses Int instead of Integer
 2. * 5
-    * 3
-    * 2
-    * 5
+   * 3
+   * 2
+   * 5
 3. `length [1, 2, 3]` returns an Int not an Integer so will not evaluate to a Fractional
 4. use `div` for integral division instead of /
 5. Bool, returns True
@@ -91,6 +105,7 @@ else EXPRESSION_B
 8. See file for 8-10
 
 ### Correcting Syntax
+
 1.
 ```
 f xs = w \`x\` 
