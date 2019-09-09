@@ -1,5 +1,7 @@
 module ChapterEight where
 
+import Data.List (intersperse)
+
 addToN :: (Eq a, Num a) => a -> a
 addToN n = go n 0
     where go n sum
@@ -29,3 +31,25 @@ dividedBy num denom = go num denom 0
 mc91 n = if (n > 100)
             then n - 10
             else mc91 (mc91 (n + 11))
+
+
+digitToWord :: Int -> String
+digitToWord n = concat (intersperse "-" (map wordNumber (digits n)))
+
+digits :: Int -> [Int]
+digits n = go n []
+    where go n output
+            | div n 10 == 0 = mod n 10 : output
+            | otherwise = go (div n 10) (mod n 10 : output)
+            
+wordNumber :: Int -> String
+wordNumber 0 = "zero"
+wordNumber 1 = "one"
+wordNumber 2 = "two"
+wordNumber 3 = "three"
+wordNumber 4 = "four"
+wordNumber 5 = "five"
+wordNumber 6 = "six"
+wordNumber 7 = "seven"
+wordNumber 8 = "eight"
+wordNumber 9 = "nine"
