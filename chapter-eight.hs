@@ -25,3 +25,7 @@ dividedBy num denom = go num denom 0
                             * (if denom < 0 then (-1) else 1)
                             ) , n) 
             | otherwise = go (n - d) d (count + 1)
+
+mc91 n = if (n > 100)
+            then n - 10
+            else mc91 (mc91 (n + 11))
