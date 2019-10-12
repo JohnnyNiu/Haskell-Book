@@ -197,3 +197,23 @@ fmap Just [1, 2, 3] =
 ### String processing
 
 1. see file
+
+## Definitions
+
+1. A higher-kinded type type is any type whose kind has a function
+arrow in it and which can be described as a type constructor
+rather than a type constant. The following types are of a higher
+kind than *:
+```haskell
+Maybe :: * -> *
+[] :: * -> *
+Either :: * -> * -> *
+(->) :: * -> * -> *
+The following are not:
+Int :: *
+Char :: *
+String :: *
+[Char] :: *
+```
+This is not to be confused with higher kinded polymorphism,
+which we’ll discuss later.

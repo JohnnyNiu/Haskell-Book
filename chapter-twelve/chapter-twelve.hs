@@ -124,3 +124,19 @@ either' f g (Left a) = f a
 either' f g (Right b) = g b
 
 -- Unfolds
+-- Why bother?
+myIterate :: (a -> a) -> a -> [a]
+myIterate f x = [x] ++ (myIterate f $ f x)
+
+myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
+myUnfoldr f z = case (f z) of
+    Just y -> fst y : ( myUnfoldr f  $ snd y)
+    Nothing -> []
+
+betterIterate :: (a -> a ) -> a -> [a]
+betterIterate f x = myUnfoldr (\y -> Just (y, f y)) x
+
+
+-- Finally something other than a list
+
+data BinaryTree a = Leaf | Node (BinaryTree a) a (BinaryTree a) deriving (Eq, Ord, Show)
