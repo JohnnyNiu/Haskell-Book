@@ -50,7 +50,7 @@ executable hello
 
 * see changes to hello.cabal, Hello.cs and Main.cs
 * if you add code like Hello.cs to a different folder then it's best to import it as a library using build-depends
-* `build-depends: base >= 4.7 && < 5, hello` 
+* `build-depends: base >= 4.7 && < 5, hello`
 
 ## Module exports
 
