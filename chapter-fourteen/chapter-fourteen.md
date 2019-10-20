@@ -265,3 +265,44 @@ coarbitrary :: CoArbitrary a => a -> Gen b -> Gen b
 * see file
 * essentially lets you randomly generate a function
 * not immediately important, but if you need to randomly generate something with a (->) type, becomes useful quickly
+
+## Chapter Exercises
+
+1. see WordNumberTest.hs
+2. see UsingQuickCheck.hs
+
+### Failure
+
+Fails because sqrt returns a floating point number which may not be exactly the same as the original Integer due to the imprecision of floating point numbers in general
+
+### Idempotence
+
+see Idempotence.hs
+
+### Make a Gen random generator for the datatype
+
+see Generators.hs
+
+### Hangman testing
+
+see tests in hangman project from last chapter
+
+## Chapter Definitions
+
+1. Unit testing is a method in which you test the smallest parts
+of an application possible. These units are individually and
+independently scrutinized for desired behaviors. Unit testing is
+better automated but it can also be done manually via a human
+entering inputs and verifying outputs.
+2. Property testing is a testing method where a subset of a large
+input space is validated, usually against a property or law some
+code should abide by. In Haskell, this is usually done with
+QuickCheck which facilitates the random generation of input and
+definition of properties to be verified. Common properties
+that are checked using property testing are things like identity,
+associativity, isomorphism, and idempotence.
+3. When we say an operation or function is idempotent or satisfies
+idempotence, we mean that applying it multiple times doesn’t
+produce a different result from the first time. One example is
+multiplying by one or zero. You always get the same result as
+the first time you multipled by one or zero.
