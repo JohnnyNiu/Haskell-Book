@@ -161,3 +161,107 @@ runQc = quickCheck prop_additionGreater
 * lets you know what value it failed on
 
 ## Morse Code
+
+* see morse project
+* see cabal for setup
+* Morse.hs for code
+
+### Turning words into code
+
+* import of Data.Map is qualified
+* map as a data structure will be covered more later in book
+* can be understood as a balanced binary tree
+* each node is a pairing of key and value
+* key is an index for the value
+* key must be orderable
+* maps can be more efficient than lists due to not having to search linearly through data
+* can find the key a lot quicker since the tree is cut in half at each comparison
+* want to make a list of pairs, each pair includes the english letter and its morse equivalent
+* see file for transliteration table
+
+### The Main event
+
+* see Main.hs
+* not all code will be explained in detail because focus is on testing
+* can run by typing `echo "hi" | stack exec morse to`
+* or `echo ".... .." | stack exec morse from`
+
+### Time to test
+
+* now need to write a test suite
+* needs own directory, test
+* has own Main module inside of tests.hs
+* see file for code
+
+### Testing the morse code
+
+* can now run tests to make sure conversions are working
+* can open a REPL from main project directory using:
+* `stack ghci morse:tests`
+* then run main to run tests
+* generates 100 random morse code conversions and makes sure they are equal once converted there and back
+* gives a pretty strong assurance program is working correctly
+
+## Arbitrary instances
+
+* important part of QuickCheck is learning to write instances of Arbitrary for your datatypes
+* can be a bit confusing but is necessary for the convenience of integrating with QuickCheck
+
+### Babby's First Arbitrary
+
+* starts with simplest possible Arbitrary instance
+* see arbitrary project
+
+### Identity Crisis
+
+* this is different, will produce random values even if the Identity structure itself doesn't and cannot vary
+* see file
+* can change the concrete type of identity's type argument to make different sample values
+
+### Arbitrary Products
+
+* arbitrary instances for product types are slightly more interesting
+* but just an extension of the Identity example
+* see file
+
+### Greater than the sum of its parts
+
+* sum types are more interesting still
+* must include `import Test.QuickCheck.Gen (oneof)`
+* sum types represent disjunction, so need to represent the exclusive possibilities in the Gen
+* one way is to pull out as many arbitrary values as required for the cases of the sum type
+* see file
+* oneof creates a Gen a from a list of Gen a by giving each value equal probability
+* can choose a different weighting of probabilities 
+* snippet of Maybe Arbitrary instance from QuickCheck library:
+
+```Haskell
+instance Arbitrary a =>
+        Arbitrary (Maybe a) where
+    arbitrary =
+        frequency [(1, return Nothing),
+                   (3, liftM Just arbitrary)]
+```
+
+* makes Just value three times more likely than Nothing value
+* Just is more likely to be interesting and useful but still want to test Nothing
+* see file for relevant example
+* Arbitrary instance for a datatype doesn't have to be the only way to generate random values for a datatype
+* can offer alternate Gens with useful behaviour
+
+### CoArbitrary
+
+* counterpart to Arbitrary enables generation of functions fitting particular type
+* can provide functions with value of type a as an argument to vary a Gen
+
+```Haskell
+arbitrary :: Arbitrary a => Gen a
+
+coarbitrary :: CoArbitrary a => a -> Gen b -> Gen b
+```
+
+* first argument is used to return a modification of second argument
+* as long as datatype has a Generic instance defined, can get these instances for free
+* see file
+* essentially lets you randomly generate a function
+* not immediately important, but if you need to randomly generate something with a (->) type, becomes useful quickly
