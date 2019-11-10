@@ -774,3 +774,146 @@ instance Functor (Wrap f) where
 instance Functor f => Functor (Wrap f) where
 fmap f (Wrap fa) = Wrap (fmap f fa)
 ```
+
+## IO Functor
+
+* IO is an abstract datatype, there is no data constructor to pattern match with
+* typeclasses are the only way to work with values of type IO a
+* Functor is one of the simplest
+
+```haskell
+-- getLine :: IO String
+-- read :: Read a => String -> a
+getInt :: IO Int
+getInt = fmap read getLine
+```
+
+* fmap lifts read over IO type and gets the Int
+* getLine isn't a string so much as a way to obtain a string
+* IO doesn't guarantee effects will be performed, only that they could be
+* side effect here is needing to block and wait for user input via the standard input stream from the OS
+
+```haskell
+-- outputs 10 because of type IO
+getInt
+10
+10
+
+-- nothing being output, information being dropped because of const
+fmap (const ()) getInt
+10
+
+-- same as doing this
+getInt = 10 :: Int
+const () getInt
+()
+
+-- except IO () doesn't output the unit value because it's assumed it communicates nothing
+```
+
+* for something more useful, can fmap any function over IO:
+
+```haskell
+fmap (+1) getInt
+10
+11
+
+fmap (++ " and me too!") getLine
+hello
+"hello and me too!"
+```
+
+* the equivalent functions in do syntax:
+
+```haskell
+meTooIsm :: IO String
+meTooIsm = do
+    input <- getLine
+    return (input ++ "and me too!")
+
+bumpIt :: IO Int
+bumpIt = do
+    intVal <- getInt
+    return (intVal + 1)
+```
+
+* if fmap f can replace that syntax then it's usually going to be shorter and clearer
+* sometimes it's useful to go with the verbose syntax while writing then while editing use the cleaner form
+
+## What if we want to do something different?
+
+* What if we want to transform only the structure and leave the type argument to the structure alone?
+* That's called natural transformations
+* can try and put together a type to express this:
+
+```haskell
+nat :: (f -> g) -> f a -> g a
+```
+
+* type is impossible as you can't have higher-kinded types as argument types to a function type
+* type signature looks like the signature for fmap
+* except f and g are higher-kinded types
+* to fix this:
+
+```haskell
+{-# LANGUAGE RankNTypes #-}
+
+type Nat f g = forall a . f a -> g a
+```
+
+* the opposite of what a functor does
+* transforms structure, preserving values
+* the right hand side forces functions of this type to ignore the structures of f and g
+* avoids talking about a in the type of Nat
+* shouldn't have specific information about f and g, because we're meant to be transforming the structure, not doing a fold
+* needs the RankNTypes extension
+
+```haskell
+type Nat f g = forall a . f a -> g a
+-- This'll work
+maybeToList :: Nat Maybe []
+maybeToList Nothing = []
+maybeToList (Just a) = [a]
+
+-- This will not work, not allowed.
+degenerateMtl :: Nat Maybe []
+degenerateMtl Nothing = []
+degenerateMtl (Just a) = [a+1]
+```
+
+* If we mention a in the type then the bottom one will be allowed
+* It shouldn't work, because it shouldn't be able to do anything except change the structure
+* It's better to be precise and say what we don't want
+
+## Functors are unique to a datatype
+
+* Functors will be unique for a given datatype
+* Not true for Monoid, but newtypes are used to preserve the unique pairing of an instance to a type
+* Part of this is that type constructors are applied in order of definition
+
+```haskell
+data Tuple a b = Tuple a b deriving (Eq, Show)
+
+instance Functor (Tuple ? b) where
+    fmap f (Tuple a b) = Tuple (f a) b
+```
+
+* the instance there is impossible in Haskell because of this order of application, but could be possible in other languages
+* one way to deal with this is to create a newtype using Flip
+
+```haskell
+{-# LANGUAGE FlexibleInstances #-}
+
+data Tuple a b = Tuple a b deriving (Eq, Show)
+
+newtype Flip f a b = Flip (f b a) deriving (Eq, Show)
+
+-- this works, goofy as it looks.
+instance Functor (Flip Tuple a) where
+    fmap f (Flip (Tuple a b)) = Flip $ Tuple (f a) b
+
+fmap (+1) (Flip (Tuple 1 "blah"))
+Flip (Tuple 2 "blah")
+```
+
+* still, Flip Tuple a b is a distinct type from Tuple a b even if it's only there to provide different Functor behaviour
