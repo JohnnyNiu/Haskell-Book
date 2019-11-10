@@ -109,3 +109,79 @@ data Sum a b = First a | Second b deriving (Eq, Show)
 
 instance Functor (Sum a) where
     fmap f (Second b) = Second (f b)
+
+-- Chapter exercises
+
+-- Write a functor
+
+--one
+
+data Quant a b = Finance | Desk a | Bloor b
+
+instance Functor (Quant a) where
+    fmap f Finance = Finance
+    fmap f (Desk a) = Desk a
+    fmap f (Bloor b) = Bloor (f b)
+
+--two
+
+-- data K a b = K a
+
+-- instance Functor (K a) where
+--     fmap f (K a) = K a
+
+--three
+
+{-# LANGUAGE FlexibleInstances #-}
+
+newtype Flip f a b = Flip (f b a) deriving (Eq, Show)
+
+newtype K a b = K a
+
+-- compiler complains about the part given by the book
+-- instance Functor (Flip K a) where
+--     fmap f (Flip (K a)) = Flip $ K (f a)
+
+--four
+
+data EvilGoateeConst a b = GoatyConst b
+
+instance Functor (EvilGoateeConst a) where
+    fmap f (GoatyConst b) = GoatyConst (f b) 
+
+--five  
+
+data LiftItOut f a = LiftItOut (f a)
+
+instance Functor f => Functor (LiftItOut f) where
+    fmap f (LiftItOut fa) = LiftItOut (fmap f fa)
+
+--six
+
+data Parappa f g a = DaWrappa (f a) (g a)
+
+instance (Functor f, Functor g) => Functor (Parappa f g) where
+    fmap f (DaWrappa (fa)(gb)) = DaWrappa (fmap f fa)(fmap f gb)
+
+--seven
+
+data IgnoreOne f g a b = IgnoringSomething (f a) (g b)
+
+instance Functor g => Functor (IgnoreOne f g a) where
+    fmap f (IgnoringSomething (fa)(gb)) = IgnoringSomething (fa)(fmap f gb)
+
+
+--eight
+
+data Notorious g o a t = Notorious (g o) (g a) (g t)
+
+instance Functor g => Functor (Notorious g o a) where
+    fmap f (Notorious (go)(ga)(gt)) = Notorious (go)(ga)(fmap f gt)
+
+-- nine
+
+data List a = Nil | Cons a (List a)
+
+instance Functor List where
+    fmap f Nil = Nil
+    fmap f (Cons a (List b)) = Cons (fa)(List fmap f b)
